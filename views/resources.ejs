@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kora Kagaz - Resources</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/resources">Resources</a>
+    <a href="/about">About Us</a>
+    <% if (session.userId) { %>
+      <a href="/articles/dashboard">Dashboard</a>
+      <a href="/profile">Profile</a>
+      <a href="/auth/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+    <% } %>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  </nav>
+  <h1>Resources</h1>
+  <p>Explore a curated collection of websites and articles to fuel your curiosity in tech and beyond!</p>
+
+  <h2>Useful Websites</h2>
+  <ul class="resource-list">
+    <li><a href="https://www.w3schools.com" target="_blank">W3Schools</a><br>Learn web development basics with tutorials and examples.</li>
+    <li><a href="https://developer.mozilla.org" target="_blank">MDN Web Docs</a><br>Detailed documentation for web technologies.</li>
+    <li><a href="https://www.freecodecamp.org" target="_blank">freeCodeCamp</a><br>Free coding courses and projects.</li>
+    <li><a href="https://stackoverflow.com" target="_blank">Stack Overflow</a><br>Ask and answer coding questions.</li>
+    <li><a href="https://github.com" target="_blank">GitHub</a><br>Host and collaborate on code projects.</li>
+    <li><a href="https://www.mongodb.com" target="_blank">MongoDB</a><br>Explore the database powering this site.</li>
+  </ul>
+
+  <h2>Recommended Articles</h2>
+  <ul class="resource-list">
+    <li><a href="https://www.smashingmagazine.com/2019/01/introduction-node-js/" target="_blank">Introduction to Node.js</a><br>A beginner’s guide to Node.js.</li>
+    <li><a href="https://www.freecodecamp.org/news/what-is-mongodb/" target="_blank">What is MongoDB?</a><br>Understand MongoDB essentials.</li>
+    <li><a href="https://css-tricks.com/understanding-flex-box/" target="_blank">Understanding Flexbox</a><br>Master CSS Flexbox used here.</li>
+    <% if (articles && articles.length > 0) { %>
+      <% articles.forEach(article => { %>
+        <li><a href="/articles/article/<%= article._id %>"><%= article.title %></a><br><%= article.category %></li>
+      <% }) %>
+    <% } else { %>
+      <li>No articles available yet. Check back soon!</li>
+    <% } %>
+  </ul>
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+</html>

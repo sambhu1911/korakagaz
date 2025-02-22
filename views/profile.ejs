@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kora Kagaz - Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/resources">Resources</a>
+    <a href="/about">About Us</a>
+    <a href="/articles/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/auth/logout">Logout</a>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  </nav>
+  <h1>My Profile</h1>
+  <p>Username: <%= session.username %></p>
+  <p>Role: <%= session.username === 'admin' ? 'Admin' : 'User' %></p>
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+</html>

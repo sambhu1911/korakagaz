@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kora Kagaz - Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/resources">Resources</a>
+    <a href="/about">About Us</a>
+    <a href="/articles/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/auth/logout">Logout</a>
+    <button onclick="toggleTheme()">Toggle Theme</button>
+  </nav>
+  <h1>Dashboard</h1>
+  <% if (session.isAdmin) { %>
+    <h2>Create Article</h2>
+    <form action="/articles/create" method="POST">
+      <input type="text" name="title" placeholder="Title" required>
+      <textarea name="content" placeholder="Content" rows="10" cols="50" required></textarea>
+      <input type="text" name="category" placeholder="Category">
+      <input type="text" name="tags" placeholder="Tags (comma-separated, e.g., Beginner, Tech)">
+      <button type="submit">Create</button>
+    </form>
+  <% } else { %>
+    <p>You do not have permission to create articles. Please log in as an admin.</p>
+  <% } %>
+  <h2>Your Articles</h2>
+  <% if (articles.length === 0) { %>
+    <p>No articles found.</p>
+  <% } else { %>
+    <% articles.forEach(article => { %>
+      <div class="article">
+        <h3><%= article.title %></h3>
+        <p><%= article.content %></p>
+        <small>Category: <%= article.category || 'General' %></small>
+        <div class="tags">
+          <% article.tags.forEach(tag => { %>
+            <span class="tag"><%= tag %></span>
+          <% }) %>
+        </div>
+        <% if (session.isAdmin) { %>
+          <!-- Edit Form -->
+          <form action="/articles/edit/<%= article._id %>" method="POST">
+            <input type="text" name="title" value="<%= article.title %>" required>
+            <textarea name="content" rows="10" cols="50" required><%= article.content %></textarea>
+            <input type="text" name="category" value="<%= article.category %>">
+            <input type="text" name="tags" value="<%= article.tags.join(', ') %>">
+            <button type="submit">Edit</button>
+          </form>
+          <!-- Delete Form -->
+          <form action="/articles/delete/<%= article._id %>" method="POST">
+            <button type="submit">Delete</button>
+          </form>
+        <% } %>
+      </div>
+    <% }) %>
+  <% } %>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+</html>

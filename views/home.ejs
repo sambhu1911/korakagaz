@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kora Kagaz - Home</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/resources">Resources</a>
+    <a href="/about">About Us</a>
+    <% if (session.userId) { %>
+      <a href="/articles/dashboard">Dashboard</a>
+      <a href="/profile">Profile</a>
+      <a href="/auth/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+    <% } %>
+    <button onclick="toggleTheme()">Toggle Theme</button>
+  </nav>
+  <h1>All Articles</h1>
+  <div class="search-bar">
+    <form action="/articles/home" method="GET">
+      <input type="text" name="search" placeholder="Search articles..." value="<%= search %>">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+  <div class="category-filter">
+    <form action="/articles/home" method="GET">
+      <select name="category">
+        <option value="">All Categories</option>
+        <option value="AI" <%= category === 'AI' ? 'selected' : '' %>>AI</option>
+        <option value="C" <%= category === 'C' ? 'selected' : '' %>>C</option>
+        <option value="History" <%= category === 'History' ? 'selected' : '' %>>History</option>
+        <option value="Web3.0" <%= category === 'Web3.0' ? 'selected' : '' %>>Web3.0</option>
+        <option value="Python" <%= category === 'Python' ? 'selected' : '' %>>Python</option>
+        <option value="JavaScript" <%= category === 'JavaScript' ? 'selected' : '' %>>JavaScript</option>
+        <option value="Blockchain" <%= category === 'Blockchain' ? 'selected' : '' %>>Blockchain</option>
+        <option value="Cybersecurity" <%= category === 'Cybersecurity' ? 'selected' : '' %>>Cybersecurity</option>
+        <option value="Data Science" <%= category === 'Data Science' ? 'selected' : '' %>>Data Science</option>
+        <option value="Cloud Computing" <%= category === 'Cloud Computing' ? 'selected' : '' %>>Cloud Computing</option>
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+  </div>
+  <% articles.forEach(article => { %>
+    <div class="article">
+      <h2><a href="/articles/article/<%= article._id %>"><%= article.title %></a></h2>
+      <p><%= article.content.slice(0, 100) %>...</p>
+      <small>Category: <%= article.category %></small>
+      <div class="tags">
+        <% article.tags.forEach(tag => { %>
+          <span class="tag"><%= tag %></span>
+        <% }) %>
+      </div>
+    </div>
+  <% }) %>
+  <div class="recent-articles">
+    <h3>Recent Articles</h3>
+    <% recentArticles.forEach(article => { %>
+      <p><a href="/articles/article/<%= article._id %>"><%= article.title %></a></p>
+    <% }) %>
+  </div>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+  </script>
+</body>
+</html>

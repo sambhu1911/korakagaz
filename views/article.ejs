@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kora Kagaz - <%= article.title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/resources">Resources</a>
+    <a href="/about">About Us</a>
+    <% if (session.userId) { %>
+      <a href="/articles/dashboard">Dashboard</a>
+      <a href="/profile">Profile</a>
+      <a href="/auth/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+    <% } %>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  </nav>
+  <h1><%= article.title %></h1>
+  <p><%= article.content %></p>
+  <small>Category: <%= article.category %></small>
+  <div class="tags">
+    <% article.tags.forEach(tag => { %>
+      <span class="tag"><%= tag %></span>
+    <% }) %>
+  </div>
+  <h3>Comments</h3>
+  <% article.comments.forEach(comment => { %>
+    <div class="comment">
+      <p><%= comment.content %></p>
+      <small>By <%= comment.author %></small>
+    </div>
+  <% }) %>
+  <form action="/articles/article/<%= article._id %>/comment" method="POST">
+    <textarea name="content" placeholder="Add a comment" required></textarea>
+    <button type="submit">Post Comment</button>
+  </form>
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+</html>
